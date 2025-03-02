@@ -1,0 +1,101 @@
+body {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(123, 131, 168);
+}
+* {
+  font-family: monospace;
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: 10px solid black;
+  border-radius: 20px;
+  padding: 10px;
+  background-color: rgb(36, 35, 35);
+  outline: 4px solid rgb(202, 173, 143);
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+}
+
+.btn {
+  width: 90px;
+  height: 90px;
+  font-size: 30px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  background-color: rgba(109, 109, 109, 0.418);
+}
+
+#lastrow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#equalbtn {
+  flex-grow: 2;
+  border-radius: 50px;
+}
+.display {
+  width: 100%;
+  text-align: end;
+  font-size: 40px;
+  border: 3px solid gray;
+  border-radius: 15px;
+  padding: 3px;
+  color: white;
+  font-weight: bold;
+}
+#clearbtn,
+#reversebtn,
+#sqrbtn {
+  background-color: gray;
+}
+#dividebtn,
+#mulbtn,
+#minusbtn,
+#plusbtn,
+#equalbtn {
+  background-color: rgb(228, 125, 56);
+}
+.author {
+  font-size: 24px;
+  font-weight: bold;
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    pink,
+    lightgreen,
+    lightyellow,
+    violet,
+    red
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: rgbFlow 4s linear infinite;
+}
+
+@keyframes rgbFlow {
+  0% {
+    background-position: 200% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
