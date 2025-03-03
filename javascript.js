@@ -5,8 +5,9 @@ let equalbtn = document.getElementById("equalbtn");
 let resetbtn = document.getElementById("clearbtn");
 let signchangebtn = document.getElementById("reversebtn");
 let sqrbtn = document.getElementById("sqrbtn");
-let loperand = "";
-let roperand = "";
+let dltbtn = document.getElementById("backbtn");
+let loperand = "0";
+let roperand = "0";
 let curOp = "NONE";
 let erasable = false;
 let opSelected = false;
@@ -18,12 +19,31 @@ buttons.forEach((btn) => {
 sqrbtn.addEventListener("click", () => {
   operate(loperand, loperand, "mul");
 });
+dltbtn.addEventListener("click", () => {
+  if (!opSelected && loperand != "") {
+    if (loperand.length == 1 || (loperand.length == 2 && loperand[0] === "-")) {
+      loperand = "0";
+      display.textContent = "0";
+      return;
+    }
+    loperand = parseFloat(loperand.slice(0, loperand.length - 1)).toString();
+    display.textContent = loperand;
+  } else if (opSelected) {
+    if (roperand.length == 1 || (roperand.length == 2 && roperand[0] === "-")) {
+      roperand = "0";
+      display.textContent = "0";
+      return;
+    }
+    roperand = parseFloat(roperand.slice(0, roperand.length - 1)).toString();
+    display.textContent = roperand;
+  }
+});
 signchangebtn.addEventListener("click", () => {
-  if (!opSelected) {
+  if (!opSelected && loperand != "") {
     loperand = (-1 * parseFloat(loperand)).toString();
     display.textContent = loperand;
   } else if (opSelected) {
-    roperand = (-1 * parseFloat(loperand)).toString();
+    roperand = (-1 * parseFloat(roperand)).toString();
     display.textContent = roperand;
   }
 });
@@ -60,13 +80,24 @@ operators.forEach((opbtn) => {
 
 function addString(number) {
   if (loperand === "" && roperand === "" && number === "0") return;
+  if (loperand === "0" && roperand === "0" && number === "0") return;
   if (!opSelected) {
+    if (loperand === "0") {
+      loperand = number;
+      display.textContent = loperand;
+      return;
+    }
     loperand += number;
     display.textContent = loperand;
   } else if (opSelected) {
     if (erasable) {
       display.textContent = "0";
       erasable = false;
+    }
+    if (roperand === "0") {
+      roperand = number;
+      display.textContent = roperand;
+      return;
     }
     roperand += number;
     display.textContent = roperand;
@@ -116,12 +147,11 @@ function operate(left, right, op) {
       break;
   }
 
-  // Format result: If integer, show without decimals; else, show up to 2 decimals
   display.textContent = Number.isInteger(res)
     ? res
     : parseFloat(res.toFixed(2));
 
-  loperand = res;
+  loperand = res.toString();
   roperand = "";
   opSelected = false;
   operators.forEach((opbtn) => {
@@ -146,8 +176,8 @@ function reset() {
   operators.forEach((opbtn) => {
     opbtn.style.backgroundColor = "rgb(228, 125, 56)";
   });
-  loperand = "";
-  roperand = "";
+  loperand = "0";
+  roperand = "0";
   display.textContent = "0";
   curOp = "NONE";
   erasable = false;
