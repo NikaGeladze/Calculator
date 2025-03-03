@@ -3,6 +3,8 @@ let display = document.querySelector(".display");
 let operators = document.querySelectorAll(".op");
 let equalbtn = document.getElementById("equalbtn");
 let resetbtn = document.getElementById("clearbtn");
+let signchangebtn = document.getElementById("reversebtn");
+let sqrbtn = document.getElementById("sqrbtn");
 let loperand = "";
 let roperand = "";
 let curOp = "NONE";
@@ -13,8 +15,20 @@ buttons.forEach((btn) => {
     if (!isNaN(btn.textContent)) addString(btn.textContent);
   });
 });
+sqrbtn.addEventListener("click", () => {
+  operate(loperand, loperand, "mul");
+});
+signchangebtn.addEventListener("click", () => {
+  if (!opSelected) {
+    loperand = (-1 * parseFloat(loperand)).toString();
+    display.textContent = loperand;
+  } else if (opSelected) {
+    roperand = (-1 * parseFloat(loperand)).toString();
+    display.textContent = roperand;
+  }
+});
 equalbtn.addEventListener("click", () => {
-  operate(loperand, roperand, curOp);
+  if (opSelected && roperand != "") operate(loperand, roperand, curOp);
 });
 resetbtn.addEventListener("click", () => {
   reset();
@@ -45,6 +59,7 @@ operators.forEach((opbtn) => {
 });
 
 function addString(number) {
+  if (loperand === "" && roperand === "" && number === "0") return;
   if (!opSelected) {
     loperand += number;
     display.textContent = loperand;
@@ -77,11 +92,17 @@ function operatorChecks(op) {
 }
 
 function operate(left, right, op) {
-  left = parseInt(left);
-  right = parseInt(right);
+  left = parseFloat(left);
+  right = parseFloat(right);
   let res = 0;
+
   switch (op) {
-    case "divide": //check for 0 division later
+    case "divide":
+      if (right === 0) {
+        alert("Don't divide by Zero!");
+        res = divide(left, 1);
+        break;
+      }
       res = divide(left, right);
       break;
     case "minus":
@@ -94,7 +115,12 @@ function operate(left, right, op) {
       res = mul(left, right);
       break;
   }
-  display.textContent = res;
+
+  // Format result: If integer, show without decimals; else, show up to 2 decimals
+  display.textContent = Number.isInteger(res)
+    ? res
+    : parseFloat(res.toFixed(2));
+
   loperand = res;
   roperand = "";
   opSelected = false;
@@ -102,6 +128,7 @@ function operate(left, right, op) {
     opbtn.style.backgroundColor = "rgb(228, 125, 56)";
   });
 }
+
 function divide(l, r) {
   return l / r;
 }
